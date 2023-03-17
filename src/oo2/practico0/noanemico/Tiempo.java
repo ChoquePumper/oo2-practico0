@@ -4,13 +4,11 @@ import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class Tiempo
-{
-	private int dia,mes,año;
-	private int hora,minuto,segundo;
-	
-	public Tiempo() throws Exception
-	{
+public class Tiempo {
+	private int dia, mes, año;
+	private int hora, minuto, segundo;
+
+	public Tiempo() throws Exception {
 		LocalDateTime fecha = LocalDateTime.now();
 		dia = fecha.getDayOfMonth();
 		mes = fecha.getMonthValue();
@@ -20,9 +18,8 @@ public class Tiempo
 		segundo = fecha.getSecond();
 		validarOError(); // Innecesario: ya genera una fecha valida por LocalDate
 	}
-	
-	public Tiempo(int dia, int mes, int año, int hora, int minuto, int segundo) throws Exception
-	{
+
+	public Tiempo(int dia, int mes, int año, int hora, int minuto, int segundo) throws Exception {
 		this.dia = dia;
 		this.mes = mes;
 		this.año = año;
@@ -31,55 +28,29 @@ public class Tiempo
 		this.segundo = segundo;
 		validarOError();
 	}
-	
-	private static LocalDateTime stCrearLocalDateTime(int dia, int mes, int año, int hora, int minuto, int segundo)
-	{
+
+	private static LocalDateTime stCrearLocalDateTime(int dia, int mes, int año, int hora, int minuto, int segundo) {
 		return LocalDateTime.of(año, mes, dia, hora, minuto, segundo);
 	}
-	
-	private LocalDateTime crearLocalDateTime()
-	{
+
+	private LocalDateTime crearLocalDateTime() {
 		return Tiempo.stCrearLocalDateTime(dia, mes, año, hora, minuto, segundo);
 	}
-	
-	private void validarOError() throws Exception
-	{
+
+	private void validarOError() throws Exception {
 		try {
 			crearLocalDateTime();
+		} catch (DateTimeException e) {
+			throw new Exception("Error al validar fecha " + formatoCorto() + ": " + e.getMessage());
 		}
-		catch (DateTimeException e) {
-			throw new Exception("Error al validar fecha "+formatoCorto()+": " + e.getMessage());
-		}
 	}
-	
-	public int getDia() {
-		return dia;
+
+	public String formatoLargo() {
+		return crearLocalDateTime().format(DateTimeFormatter.ofPattern("EEEE, d 'de' MMMM 'de' uuuu, HH:mm:ss"));
 	}
-	public int getMes() {
-		return mes;
-	}
-	public int getAño() {
-		return año;
-	}
-	
-	public int getHora() {
-		return hora;
-	}
-	public int getMinuto() {
-		return minuto;
-	}
-	public int getSegundo() {
-		return segundo;
-	}
-	
-	public String formatoLargo()
-	{
-		return crearLocalDateTime().format( DateTimeFormatter.ofPattern("EEEE, d 'de' MMMM 'de' uuuu, HH:mm:ss") );
-	}	
-	
-	public String formatoCorto()
-	{
-		//return crearLocalDate().format( DateTimeFormatter.ofPattern("dd/MM/uuuu") );
-		return String.format("%02d/%02d/%04d %02d:%02d", dia,mes,año, hora,minuto);
+
+	public String formatoCorto() {
+		// return crearLocalDate().format( DateTimeFormatter.ofPattern("dd/MM/uuuu") );
+		return String.format("%02d/%02d/%04d %02d:%02d", dia, mes, año, hora, minuto);
 	}
 }
